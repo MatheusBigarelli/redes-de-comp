@@ -34,7 +34,7 @@ final class HTTPRequest implements Runnable {
         if(fileName.endsWith(".gif")) {
             return "image/gif";
         }
-        if(fileName.endsWith(".jpeg")) {
+        if(fileName.endsWith(".jpeg") || fileName.endsWith(".jpg")) {
             return "image/jpeg";
         }
         return "application/octet-stream";
@@ -120,12 +120,12 @@ final class HTTPRequest implements Runnable {
         clientOutputStream.writeBytes(CRLF);
 
         // Sending entity
-        if (fileExists) {
-            sendBytes(file, clientOutputStream);
-        } else {
+        if (!fileExists) {
+            file = new FileInputStream("..\\html\\notfound.html");
             clientOutputStream.writeBytes(entityBody);
-        }
 
+        }
+        sendBytes(file, clientOutputStream);
 
         clientInputStream.close();
         bufferedInput.close();
